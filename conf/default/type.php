@@ -15,9 +15,10 @@ const <?php echo $typeName; ?>Type = new GraphQLObjectType({
 });
 
 module.exports = {
+    baseUrl: BASE_URL,
     item: <?php echo $typeName; ?>Type,
     queries: {
-        people: {
+        <?php echo $typeUrl ?>: {
             type: <?php echo $typeName; ?>Type,
             args: {
                 id: {type: GraphQLString}
