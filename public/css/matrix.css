@@ -1,0 +1,26 @@
+* {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    color: #5ce638;
+}
+
+body {
+    background-color: #000;
+}
+
+ul > li {
+    list-style-type: none;
+}
+
+ul > li:before {
+    content: '> ';
+}
+
+form {
+    display: inline;
+}
+
+input {
+    background-color: #000;
+    border: 0;
+    width: calc(100% - 20px);
+}
