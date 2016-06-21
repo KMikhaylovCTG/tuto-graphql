@@ -1,5 +1,6 @@
 {
   "name": "jalisfusion/tuto-graphql",
+  "version": "1.0.0",
   "description": "GraphQL Tutorial",
   "homepage": "https://github.com/sylvainmrs/tuto-graphql",
   "type": "library",
