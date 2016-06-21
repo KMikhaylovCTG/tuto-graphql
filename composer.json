@@ -1,0 +1,10 @@
+{
+  "name": "jalisfusion/tuto-graphql",
+  "description": "GraphQL Tutorial",
+  "homepage": "https://github.com/sylvainmrs/tuto-graphql",
+  "type": "library",
+  "license": "BSD-2-Clause",
+  "require": {
+    "php": ">=5.5.0"
+  }
+}
