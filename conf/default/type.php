@@ -1,8 +1,9 @@
 const GraphQLString = require('graphql').GraphQLString;
 const GraphQLObjectType = require('graphql').GraphQLObjectType;
 
-const fetch = require('node-fetch');
 const paths = require('../paths.js');
+const fetchByUrl = require('../lib/SwFetch').byUrl;
+//const fetchByPage = require('../lib/SwFetch').byPage;
 
 const BASE_URL = `${paths.baseUrl}/<?php echo $typeUrl ?>`;
 
@@ -15,7 +16,6 @@ const <?php echo $typeName; ?>Type = new GraphQLObjectType({
 });
 
 module.exports = {
-    baseUrl: BASE_URL,
     item: <?php echo $typeName; ?>Type,
     queries: {
         <?php echo $typeUrl ?>: {
@@ -23,8 +23,8 @@ module.exports = {
             args: {
                 id: {type: GraphQLString}
             },
-            resolve: (root, args) => fetch(`${BASE_URL}/${args.id}/`)
-                .then(res => res.json())
+            resolve: (root, args) =>
+                fetchByUrl(`${BASE_URL}/${args.id}/`)
         }
     }
 };

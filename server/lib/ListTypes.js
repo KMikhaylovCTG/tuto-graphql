@@ -9,8 +9,13 @@ module.exports = function (path) {
     this.readed = false;
 
     this.read = function () {
+        var _this = this;
         var fs = require('fs');
-        this.files = fs.readdirSync(this.typePath);
+        this.files = fs.readdirSync(this.typePath)
+            .filter(file =>
+                fs.lstatSync(
+                    _this.path.join(_this.typePath, file)).isFile()
+            );
         this.readed = true;
     };
 
