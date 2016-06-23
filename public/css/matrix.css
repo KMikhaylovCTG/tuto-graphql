@@ -24,3 +24,8 @@ input {
     border: 0;
     width: calc(100% - 20px);
 }
+
+ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}

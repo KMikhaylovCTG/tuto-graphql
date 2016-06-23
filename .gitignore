@@ -1,5 +1,9 @@
 /node_modules
-/src
+/react
+/react/src
+/react/lib
 /server/schema.js
+/server/schema.graphql
+/server/schema.json
 /server/types
 /.idea

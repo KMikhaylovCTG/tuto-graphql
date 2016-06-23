@@ -24,25 +24,37 @@ require_once CONF_DIR.'addType.php';
 </ul>
 <script type="text/javascript" src="public/js/react/react.js"></script>
 <script type="text/javascript" src="public/js/react/react-dom.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 <script type="text/javascript" src="public/js/relay/relay.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 <script type="text/babel">
     <?php
-    $dd = dir(REACT_DIR);
+    $dd = dir(REACT_LIB_DIR);
+    $nbFiles = 0;
     while (false !== ($entry = $dd->read())) {
-        if (is_file(REACT_DIR . $entry) and preg_match('/\.js$/', $entry)) {
+        if (is_file(REACT_LIB_DIR . $entry) and preg_match('/\.js$/', $entry)) {
             echo "// --------------------------------------------------\n";
             echo "// GRAPHQL TUTORIEL\n";
             echo "// " . strtoupper($entry) . "\n";
             echo "// --------------------------------------------------\n";
-            echo file_get_contents(REACT_DIR . $entry) . "\n\n";
+            echo file_get_contents(REACT_LIB_DIR . $entry) . "\n\n";
+            $nbFiles++;
         }
     }
+    if ($nbFiles > 0) {
     ?>
+    Relay.injectNetworkLayer(
+        new Relay.DefaultNetworkLayer('http://localhost:5000/graphql')
+    );
+    // Pages
     ReactDOM.render(
-        <MainApp />,
+        React.createElement(Relay.RootContainer,
+            {
+                Component: Page,
+                route: pageRoute
+            }),
         document.getElementById('main-app')
     );
+    <?php } ?>
 </script>
 </body>
 </html>
