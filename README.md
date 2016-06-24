@@ -166,5 +166,203 @@ starshipsConnection: {
 ```
 * Do the same DataLoader things with People types. Execute the query again, and then notice that all elements are loaded once
 
-**TO BE CONTINUED**
+## 3. Fragments
+* Start with a simple fragment on People, apply it with PeopleList > PeoleItem and Starships > pilotsConnection
+```
+fragment PeopleFragment on People {
+  url
+  name
+  gender
+  mass
+}
+```
+* Create another simple fragment on Starships, apply it on People > starshipsConnection
+```
+fragment StarshipsFragment on Starships {
+  name
+  manufacturer
+  model
+}
+```
+* Complete this fragment by including pilotsConnection field
+```
+fragment StarshipsFragment on Starships {
+  name
+  manufacturer
+  model
+  pilotsConnection {
+    ...PeopleFragment
+  }
+}
+```
+* Just an example of named queries, or multiple request in one
+```
+query MaRequete {
+    Luke: people(id: "1") {
+        name
+    },
+    C3PO: people(id: "2") {
+        name
+    }
+}
 
+query MaRequete2 {
+    people(id: "1") {
+        name
+    }
+}
+```
+
+## 4. React & Relay
+* Create `react/src/People.js`React class, expecting a people prop with all caracter data
+```
+var People = React.createClass({
+   render: function () {
+       var {people} = this.props;
+       return (
+           <li>
+               <a href={people.url} target="_blank">
+                   {people.name}
+               </a>
+               <ul>
+                   <li>{people.gender}</li>
+                   <li>{people.mass}</li>
+               </ul>
+           </li>
+       );
+   }
+});
+```
+* In the same file, create the Relay container with a fragment containing the necessary People information
+```
+People = Relay.createContainer(People, {
+   fragments: {
+       people: () => Relay.QL`
+         fragment on People {
+             url
+             name
+             gender
+             mass
+         }
+       `
+   }
+});
+```
+* Create the `react/src/Page.js` React class containing People list
+```
+var Page = React.createClass({
+   render: function () {
+       var people = this.props.people.peopleItem.map(
+           (person, i) =>
+           (<People people={person} key={'person' + i}/>)
+       );
+       return (
+           <ul>
+               {people}
+           </ul>
+       );
+   }
+});
+```
+* In the same file, create a Relay container with a PeopleList fragment
+```
+Page = Relay.createContainer(Page, {
+   fragments: {
+       people: () => Relay.QL`
+           fragment on PeopleList {
+               peopleItem {
+                   ${People.getFragment('people')}
+               }
+           }
+       `
+   }
+});
+```
+* Finally, Relay need a list of all queries
+```
+var pageRoute = {
+   queries: {
+       people: (Component) => Relay.QL`
+           query PeopleQuery {
+               peopleList {
+                   ${Component.getFragment('people')}
+               }
+           }
+       `
+   },
+   name: 'pageRoute',
+   params: {}
+};
+```
+*  gulp schema
+* gulp lib
+* Create `react/src/Starships.js` React class expecting a starships prop with all starship data
+```
+var Starships = React.createClass({
+   render: function () {
+       var {starships} = this.props;
+       return(
+           <li>
+               <a href={starships.url}>
+                   {starships.name}
+               </a>
+               <ul>
+                   <li>{starships.model}</li>
+                   <li>{starships.manufacturer}</li>
+               </ul>
+           </li>
+       );
+   }
+});
+```
+* In the same file, create a Relay container with a fragment containing the necessary Starships information
+```
+Starships = Relay.createContainer(Starships, {
+   fragments: {
+       starships: () => Relay.QL`
+           fragment on Starships {
+             url
+             name
+             model
+             manufacturer
+           }
+       `
+   }
+});
+```
+* In the People Relay container, add starphipsConnection fragment
+```
+starshipsConnection {
+ ${Starships.getFragment('starships')}
+}
+```
+* In the People React class, add starships
+```
+var starships = people.starshipsConnection.map(
+   (starship, i) => 
+      (<Starships starships={starship} key={'starship' + i}/>)
+);
+
+<ul>
+   {starships}
+</ul>
+```
+* Change pageRoute to add pageID variable
+```
+var pageRoute = {
+   queries: {
+       people: (Component) => Relay.QL`
+           query PeopleQuery {
+               peopleList(page: $pageID) {
+                   ${Component.getFragment('people')}
+               }
+           }
+       `
+   },
+   name: 'pageRoute',
+   params: {
+       pageID: 1
+   }
+};
+```
+* Have some fun, and add the homeworld (Planets) field in People Type
