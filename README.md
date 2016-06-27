@@ -4,7 +4,7 @@ We use in this tutorial, the Star Wars API (http://swapi.co)
 
 ## 1. Install
 * Clone https://github.com/sylvainmrs/tuto-graphql in the local server root
-* In Bash, exec "npm install"
+* In Bash, execute "npm install"
 * Go to http://localhost/tuto-graphql
 
 ## 2. Types
