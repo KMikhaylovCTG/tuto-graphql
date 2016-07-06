@@ -1,4 +1,4 @@
-# Tutoriel GraphQL
+# GraphQL Tutorial
 
 We use in this tutorial, the Star Wars API (http://swapi.co)
 
